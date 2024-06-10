@@ -1,0 +1,3 @@
+libraries/lib-mcu/misc.o
+libraries/lib-mcu/stm32l1xx_adc.o
+libraries/lib-mcu/stm32l1xx_aes.o
