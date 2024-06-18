@@ -1,14 +1,14 @@
 /**
   ******************************************************************************
-  * @file    GPIO/IOToggle/stm32l1xx_it.h 
+  * @file    fonts.h
   * @author  MCD Application Team
-  * @version V1.2.1
-  * @date    20-April-2015
-  * @brief   This file contains the headers of the interrupt handlers.
+  * @version V5.0.2
+  * @date    05-March-2012
+  * @brief   Header for fonts.c file
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2015 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -26,35 +26,99 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32L1xx_IT_H
-#define __STM32L1xx_IT_H
+#ifndef __FONTS_H
+#define __FONTS_H
 
 #ifdef __cplusplus
  extern "C" {
-#endif 
+#endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32l1xx.h"
+#include <stdint.h>
 
-/* Exported types ------------------------------------------------------------*/
-/* Exported constants --------------------------------------------------------*/
-/* Exported macro ------------------------------------------------------------*/
-/* Exported functions ------------------------------------------------------- */
+/** @addtogroup Utilities
+  * @{
+  */
+  
+/** @addtogroup STM32_EVAL
+  * @{
+  */ 
 
-void NMI_Handler(void);
-void HardFault_Handler(void);
-void MemManage_Handler(void);
-void BusFault_Handler(void);
-void UsageFault_Handler(void);
-void SVC_Handler(void);
-void DebugMon_Handler(void);
-void PendSV_Handler(void);
-void SysTick_Handler(void);
+/** @addtogroup Common
+  * @{
+  */
+
+/** @addtogroup FONTS
+  * @{
+  */ 
+
+/** @defgroup FONTS_Exported_Types
+  * @{
+  */ 
+typedef struct _tFont
+{    
+  const uint16_t *table;
+  uint16_t Width;
+  uint16_t Height;
+  
+} sFONT;
+
+extern sFONT Font16x24;
+extern sFONT Font12x12;
+extern sFONT Font8x12;
+extern sFONT Font8x8;
+
+/**
+  * @}
+  */ 
+
+/** @defgroup FONTS_Exported_Constants
+  * @{
+  */ 
+#define LINE(x) ((x) * (((sFONT *)LCD_GetFont())->Height))
+
+/**
+  * @}
+  */ 
+
+/** @defgroup FONTS_Exported_Macros
+  * @{
+  */ 
+/**
+  * @}
+  */ 
+
+/** @defgroup FONTS_Exported_Functions
+  * @{
+  */ 
+/**
+  * @}
+  */
 
 #ifdef __cplusplus
 }
 #endif
+  
+#endif /* __FONTS_H */
+ 
+/**
+  * @}
+  */
 
-#endif /* __STM32L1xx_IT_H */
+/**
+  * @}
+  */ 
+
+/**
+  * @}
+  */
+
+/**
+  * @}
+  */
+
+/**
+  * @}
+  */      
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

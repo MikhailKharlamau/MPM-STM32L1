@@ -23,7 +23,7 @@
 #include "stm32l_discovery_lcd.h"
 #include "discover_board.h"
 #include "stm32l1xx_lcd.h"
-#include "main.h"
+/*#include "main.h"*/
 
 /* this variable can be used for accelerate the scrolling exit when push user button */
 volatile bool KeyPressed = FALSE; 
@@ -273,7 +273,7 @@ static void LCD_Conv_Char_Seg(uint8_t* c,bool point,bool column, uint8_t* digit)
       ch = star;
       break;
                   
-    case 'µ' :
+    case '\B5' :
       ch = C_UMAP;
       break;
     
@@ -293,7 +293,7 @@ static void LCD_Conv_Char_Seg(uint8_t* c,bool point,bool column, uint8_t* digit)
       ch = C_slatch;
       break;  
       
-    case '°' :
+    case '\B0' :
       ch = C_percent_1;
       break;  
     case '%' :

@@ -18,7 +18,8 @@ CFLAGS += -ffreestanding -nostdlib
 CFLAGS += -I. -I inc 
 CFLAGS += $(INCLLIBCORE) $(INCLLIBPERIPH)
 
-SRCS = stm32l_discovery_lcd.c
+SRCS = fonts.c lcd_log.c stm32l152_eval.c stm32l152_eval_glass_lcd.c stm32l152_eval_i2c_ee.c stm32l152_eval_i2c_tsensor.c \
+stm32l152_eval_lcd.c stm32l152_eval_spi_sd.c stm32l_discovery_lcd.c 
  
 OBJS = $(SRCS:.c=.o)
 
@@ -29,7 +30,7 @@ all: libstm32l1b.a
 lib:
 	$(MAKE) -C $(STD_PERIPH_LIB)
 
-%.o : %.c
+%.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $^
 
 libstm32l1b.a: $(OBJS)
@@ -37,3 +38,4 @@ libstm32l1b.a: $(OBJS)
 
 clean:
 	rm -f $(OBJS) libstm32l1b.a
+
