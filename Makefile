@@ -11,7 +11,8 @@ LDSCRIPT_INC=device/ldscripts
 OPENOCD_BOARD_DIR=/usr/share/openocd/scripts/board
 
 # Configuration (cfg) file containing programming directives for OpenOCD
-OPENOCD_PROC_FILE=extra/stm32f0-openocd-hex.cfg
+#OPENOCD_PROC_FILE=extra/stm32f0-openocd-hex.cfg
+OPENOCD_PROC_FILE=extra/stm32f0-openocd.cfg
 
 # Location of the individual libraries and the spells to cast in order to use them
 PATHLIBCORE = libraries/lib-core
