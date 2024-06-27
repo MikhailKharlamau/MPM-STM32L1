@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    GPIO/IOToggle/stm32l1xx_conf.h 
+  * @file    SysTick/SysTick_Example/stm32l1xx_conf.h 
   * @author  MCD Application Team
   * @version V1.2.1
   * @date    20-April-2015

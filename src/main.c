@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    GPIO/IOToggle/main.c 
+  * @file    SysTick/SysTick_Example/main.c 
   * @author  MCD Application Team
   * @version V1.2.1
   * @date    20-April-2015
@@ -26,41 +26,30 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32l1xx.h"
-
-#define USE_STM32L152_EVAL
-
-#ifdef USE_STM32L152D_EVAL 
-  #include "stm32l152d_eval.h"
-  #define GPIO_PIN_X GPIO_Pin_3
-  #define GPIO_PIN_Y GPIO_Pin_7
-  #define BSRR_VAL 0x88
-#elif defined USE_STM32L152_EVAL 
-  #include "stm32l152_eval.h"
-  #define GPIO_PIN_X GPIO_Pin_0
-  #define GPIO_PIN_Y GPIO_Pin_1
-  #define BSRR_VAL 0x03
-#endif 
+#include "main.h"
 
 /** @addtogroup STM32L1xx_StdPeriph_Examples
   * @{
   */
 
-/** @addtogroup IOToggle
+/** @addtogroup SysTick_Example
   * @{
   */ 
 
 /* Private typedef -----------------------------------------------------------*/
-GPIO_InitTypeDef        GPIO_InitStructure;
-
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
+GPIO_InitTypeDef GPIO_InitStructure;
+static __IO uint32_t TimingDelay;
+
 /* Private function prototypes -----------------------------------------------*/
+void Delay(__IO uint32_t nTime);
+
 /* Private functions ---------------------------------------------------------*/
 
 /**
-  * @brief  Main program
+  * @brief   Main program
   * @param  None
   * @retval None
   */
@@ -71,87 +60,91 @@ int main(void)
        file (startup_stm32l1xx_xx.s) before to branch to application main.
        To reconfigure the default setting of SystemInit() function, refer to
        system_stm32l1xx.c file
-     */
+     */     
+       
+  /* Initialize Leds mounted on STM32L152-EVAL board */
+  //STM_EVAL_LEDInit(LED1);
+  //STM_EVAL_LEDInit(LED2);
+  STM_EVAL_LEDInit(LED3);
+  STM_EVAL_LEDInit(LED4);
 
-  /* GPIOD Periph clock enable */
-  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOD, ENABLE);
+  /* Turn on LED1 and LED3 */
+  //STM_EVAL_LEDOn(LED1);
+  STM_EVAL_LEDOn(LED3);
+  while(1);
 
-  /* Configure PD0 and PD1 or PD3 and PD7 in output pushpull mode */
-  GPIO_InitStructure.GPIO_Pin = GPIO_PIN_X | GPIO_PIN_Y;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_40MHz;
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-  GPIO_Init(GPIOD, &GPIO_InitStructure);
+  /* Setup SysTick Timer for 1 msec interrupts.
+     ------------------------------------------
+    1. The SysTick_Config() function is a CMSIS function which configure:
+       - The SysTick Reload register with value passed as function parameter.
+       - Configure the SysTick IRQ priority to the lowest value (0x0F).
+       - Reset the SysTick Counter register.
+       - Configure the SysTick Counter clock source to be Core Clock Source (HCLK).
+       - Enable the SysTick Interrupt.
+       - Start the SysTick Counter.
+    
+    2. You can change the SysTick Clock source to be HCLK_Div8 by calling the
+       SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8) just after the
+       SysTick_Config() function call. The SysTick_CLKSourceConfig() is defined
+       inside the misc.c file.
 
-  /* To achieve GPIO toggling maximum frequency, the following  sequence is mandatory. 
-     You can monitor PD0 and  PD1 or PD3 and PD7 on the scope to measure the output signal. 
-     If you need to fine tune this frequency, you can add more GPIO set/reset 
-     cycles to minimize more the infinite loop timing.
-     This code needs to be compiled with high speed optimization option.  */
+    3. You can change the SysTick IRQ priority by calling the
+       +NVIC_SetPriority(SysTick_IRQn,...) just after the SysTick_Config() function 
+       call. The NVIC_SetPriority() is defined inside the core_cm3.h file.
+
+    4. To adjust the SysTick time base, use the following formula:
+                            
+         Reload Value = SysTick Counter Clock (Hz) x  Desired Time base (s)
+    
+       - Reload Value is the parameter to be passed for SysTick_Config() function
+       - Reload Value should not exceed 0xFFFFFF
+   */
+  if (SysTick_Config(SystemCoreClock / 1000))
+  { 
+    /* Capture error */ 
+    while (1);
+  }
+
   while (1)
   {
-    /* Set PD0 and PD2 or PD3 and PD7 */
-    GPIOD->BSRRL = BSRR_VAL;
-    /* Reset PD0 and PD2 or PD3 and PD7 */
-    GPIOD->BSRRH = BSRR_VAL;
+    /* Toggle LED2 and LED4 */
+    //STM_EVAL_LEDToggle(LED2);
+    STM_EVAL_LEDToggle(LED4);
 
-    /* Set PD0 and PD2 or PD3 and PD7 */
-    GPIOD->BSRRL = BSRR_VAL;
-    /* Reset PD0 and PD2 or PD3 and PD7 */
-    GPIOD->BSRRH = BSRR_VAL;
+    /* Insert 50 ms delay */
+    Delay(50);
 
-    /* Set PD0 and PD2 or PD3 and PD7 */
-    GPIOD->BSRRL = BSRR_VAL;
-    /* Reset PD0 and PD2 or PD3 and PD7 */
-    GPIOD->BSRRH = BSRR_VAL;
+    /* Toggle LED1 and LED3 */
+    //STM_EVAL_LEDToggle(LED1);
+    STM_EVAL_LEDToggle(LED3);
 
-    /* Set PD0 and PD2 or PD3 and PD7 */
-    GPIOD->BSRRL = BSRR_VAL;
-    /* Reset PD0 and PD2 or PD3 and PD7 */
-    GPIOD->BSRRH = BSRR_VAL;
-
-    /* Set PD0 and PD2 or PD3 and PD7 */
-    GPIOD->BSRRL = BSRR_VAL;
-    /* Reset PD0 and PD2 or PD3 and PD7 */
-    GPIOD->BSRRH = BSRR_VAL;
-
-    /* Set PD0 and PD2 or PD3 and PD7 */
-    GPIOD->BSRRL = BSRR_VAL;
-    /* Reset PD0 and PD2 or PD3 and PD7 */
-    GPIOD->BSRRH = BSRR_VAL;
-
-    /* Set PD0 and PD2 or PD3 and PD7 */
-    GPIOD->BSRRL = BSRR_VAL;
-    /* Reset PD0 and PD2 or PD3 and PD7 */
-    GPIOD->BSRRH = BSRR_VAL;
-
-    /* Set PD0 and PD2 or PD3 and PD7 */
-    GPIOD->BSRRL = BSRR_VAL;
-    /* Reset PD0 and PD2 or PD3 and PD7 */
-    GPIOD->BSRRH = BSRR_VAL;
-
-    /* Set PD0 and PD2 or PD3 and PD7 */
-    GPIOD->BSRRL = BSRR_VAL;
-    /* Reset PD0 and PD2 or PD3 and PD7 */
-    GPIOD->BSRRH = BSRR_VAL;
-
-    /* Set PD0 and PD2 or PD3 and PD7 */
-    GPIOD->BSRRL = BSRR_VAL;
-    /* Reset PD0 and PD2 or PD3 and PD7 */
-    GPIOD->BSRRH = BSRR_VAL;
+    /* Insert 100 ms delay */
+    Delay(100);
   }
 }
 
 /**
-  * @brief  Delay Function.
-  * @param  nCount:specifies the Delay time length.
+  * @brief  Inserts a delay time.
+  * @param  nTime: specifies the delay time length, in milliseconds.
   * @retval None
   */
-void Delay(__IO uint32_t nCount)
+void Delay(__IO uint32_t nTime)
+{ 
+  TimingDelay = nTime;
+
+  while(TimingDelay != 0);
+}
+
+/**
+  * @brief  Decrements the TimingDelay variable.
+  * @param  None
+  * @retval None
+  */
+void TimingDelay_Decrement(void)
 {
-  while(nCount--)
-  {
+  if (TimingDelay != 0x00)
+  { 
+    TimingDelay--;
   }
 }
 

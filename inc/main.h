@@ -1,10 +1,10 @@
 /**
   ******************************************************************************
-  * @file    SysTick/SysTick_Example/stm32l1xx_it.h 
+  * @file    SysTick/SysTick_Example/main.h 
   * @author  MCD Application Team
   * @version V1.2.1
   * @date    20-April-2015
-  * @brief   This file contains the headers of the interrupt handlers.
+  * @brief   Header for main.c module
   ******************************************************************************
   * @attention
   *
@@ -26,35 +26,26 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32L1xx_IT_H
-#define __STM32L1xx_IT_H
-
-#ifdef __cplusplus
- extern "C" {
-#endif 
+#ifndef __MAIN_H
+#define __MAIN_H
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l1xx.h"
+
+#define USE_STM32L152D_EVAL
+
+#ifdef USE_STM32L152D_EVAL 
+  #include "stm32l152d_eval.h"
+#elif defined USE_STM32L152_EVAL 
+  #include "stm32l152_eval.h"
+#endif 
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
+void TimingDelay_Decrement(void);
 
-void NMI_Handler(void);
-void HardFault_Handler(void);
-void MemManage_Handler(void);
-void BusFault_Handler(void);
-void UsageFault_Handler(void);
-void SVC_Handler(void);
-void DebugMon_Handler(void);
-void PendSV_Handler(void);
-void SysTick_Handler(void);
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif /* __STM32L1xx_IT_H */
+#endif /* __MAIN_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

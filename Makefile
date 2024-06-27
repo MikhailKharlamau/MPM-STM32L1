@@ -11,8 +11,8 @@ LDSCRIPT_INC=device/ldscripts
 OPENOCD_BOARD_DIR=/usr/share/openocd/scripts/board
 
 # Configuration (cfg) file containing programming directives for OpenOCD
-#OPENOCD_PROC_FILE=extra/stm32f0-openocd-hex.cfg
-OPENOCD_PROC_FILE=extra/stm32f0-openocd.cfg
+OPENOCD_PROC_FILE=extra/stm32f0-openocd-hex.cfg
+#OPENOCD_PROC_FILE=extra/stm32f0-openocd.cfg
 
 # Location of the individual libraries and the spells to cast in order to use them
 PATHLIBCORE = libraries/lib-core
@@ -72,15 +72,15 @@ lib:
 
 proj: $(PROJ_NAME).elf
 
-$(PROJ_NAME).elf: $(SRCS)
-	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+$(PROJ_NAME).bin: $(SRCS)
+	$(CC) $(CFLAGS) $^ -o $(PROJ_NAME).elf $(LDFLAGS)
 	$(OBJCOPY) -O ihex $(PROJ_NAME).elf $(PROJ_NAME).hex
 	$(OBJCOPY) -O binary $(PROJ_NAME).elf $(PROJ_NAME).bin
 	$(OBJDUMP) -St $(PROJ_NAME).elf >$(PROJ_NAME).lst
 	$(SIZE) $(PROJ_NAME).elf
 	
 program: $(PROJ_NAME).bin
-	openocd -f $(OPENOCD_BOARD_DIR)/stm32ldiscovery.cfg -f $(OPENOCD_PROC_FILE) -c "stm_flash `pwd`/$(PROJ_NAME).bin" -c shutdown
+	openocd -f $(OPENOCD_BOARD_DIR)/stm32ldiscovery.cfg -f $(OPENOCD_PROC_FILE) -c "stm_flash `pwd`/$(PROJ_NAME).hex" -c shutdown
 
 clean:
 	find ./ -name '*~' | xargs rm -f

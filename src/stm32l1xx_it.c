@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    GPIO/IOToggle/stm32l1xx_it.c 
+  * @file    SysTick/SysTick_Example/stm32l1xx_it.c 
   * @author  MCD Application Team
   * @version V1.2.1
   * @date    20-April-2015
@@ -29,12 +29,14 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l1xx_it.h"
+#include "main.h"
+
 
 /** @addtogroup STM32L1xx_StdPeriph_Examples
   * @{
   */
 
-/** @addtogroup IOToggle
+/** @addtogroup SysTick_Example
   * @{
   */ 
 
@@ -144,6 +146,7 @@ void PendSV_Handler(void)
   */
 void SysTick_Handler(void)
 {
+  TimingDelay_Decrement();
 }
 
 /******************************************************************************/
